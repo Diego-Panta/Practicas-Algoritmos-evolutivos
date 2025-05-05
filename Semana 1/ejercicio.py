@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 from itertools import combinations
 
 #Estudiante: Panta Piscoche Jose Diego
-#Semana 2 30/04/25
-
 # Coeficientes de la función objetivo: Z = 50x + 80y
 def objetivo(x, y):
     return 50 * x + 80 * y

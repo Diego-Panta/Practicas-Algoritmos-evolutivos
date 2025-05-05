@@ -22,7 +22,7 @@ stats = df['Costo_total'].describe()
 print("\nEstadísticas de Costo_total")
 print(stats)
 
-#Filtar filas
+#Filtrar filas
 df_mayor_6 = df[df['Costo_total']>6.0]
 
 #Imprimimos el gasto promedio y la lista de estudiantes con gasto > S/6.00
