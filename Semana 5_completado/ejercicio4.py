@@ -1,13 +1,10 @@
 import pandas as pd
 import random
-import numpy as np
 
 # Paso 1: Leer el archivo CSV con la información de proyectos
-# Suponemos que el archivo CSV tiene las columnas: 'ProjectID', 'Cost_Soles', 'Benefit_Soles'
 df_proyectos = pd.read_csv('projects.csv')
 
-# Paso 2: Representación de la solución como un bitstring
-# El bitstring tendrá longitud 8, ya que hay 8 proyectos.
+# Paso 2: Representación de la solución como un bitstring (longitud 8)
 bitstring_actual = [random.randint(0, 1) for _ in range(8)]
 
 # Paso 3: Función de aptitud
@@ -18,24 +15,22 @@ def calcular_aptitud(bitstring):
         if bit == 1:
             costo_total += df_proyectos.iloc[i]['Cost_Soles']
             beneficio_total += df_proyectos.iloc[i]['Benefit_Soles']
-    
     if costo_total > 10000:
         return -float('inf')
-    
     return beneficio_total
 
-# Paso 4: Función de vecindad (volteamos un bit)
+# Paso 4: Generar vecinos (voltear un bit)
 def generar_vecinos(bitstring):
     vecinos = []
     for i in range(len(bitstring)):
         vecino = bitstring.copy()
-        vecino[i] = 1 - vecino[i]  # Volteamos el bit
+        vecino[i] = 1 - vecino[i]
         vecinos.append(vecino)
     return vecinos
 
-# Paso 5: Hill climbing - Búsqueda local
+# Paso 5: Hill climbing
 def hill_climbing(iteraciones=1000):
-    bitstring_actual = [random.randint(0, 1) for _ in range(8)]  # Iniciar aleatoriamente
+    bitstring_actual = [random.randint(0, 1) for _ in range(8)]
     aptitud_actual = calcular_aptitud(bitstring_actual)
     
     for _ in range(iteraciones):
@@ -53,7 +48,7 @@ def hill_climbing(iteraciones=1000):
             bitstring_actual = mejor_vecino
             aptitud_actual = mejor_aptitud
         else:
-            break  # No hay mejora
+            break
     
     return bitstring_actual, aptitud_actual
 
@@ -64,10 +59,10 @@ bitstring_optimo, beneficio_optimo = hill_climbing()
 print(f"Proyectos seleccionados (bitstring): {bitstring_optimo}")
 print(f"Beneficio total: {beneficio_optimo} S/")
 
-# Paso 8: Mostrar los proyectos seleccionados usando el bitstring
-# Convertimos el bitstring a un array booleano para filtrar los proyectos
-bitstring_optimo = np.array(bitstring_optimo, dtype=bool)
-proyectos_seleccionados = df_proyectos[bitstring_optimo]
+# Paso 8: Filtrar proyectos con pandas sin numpy, creando una lista booleana
+filtro_booleano = [bool(b) for b in bitstring_optimo]
+
+proyectos_seleccionados = df_proyectos[filtro_booleano]
 
 print("Proyectos seleccionados:")
 print(proyectos_seleccionados[['ProjectID', 'Cost_Soles', 'Benefit_Soles']])
